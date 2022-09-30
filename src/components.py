@@ -1,77 +1,85 @@
-# sourcery skip: use-datetime-now-not-today
 import datetime
 from dash import html, dcc, dash_table
 import dash_bootstrap_components as dbc
-from run import data, complete_data
 
 
-header = html.Header(
-    className="headName",
-    children=[
-        html.H2(
-            "Plusdin Recommenders Evaluation Tool",
-            style={
-                "display": "inline-block",
-                "font-size": 30,
-                "color": "white",
-                "margin-left": "1em",
-            },
+sidebar_width = "20rem"
+
+
+# the style arguments for the sidebar. We use position:fixed and a fixed width
+SIDEBAR_STYLE = {
+    "position": "fixed",
+    "top": 0,
+    "left": 0,
+    "bottom": 0,
+    "width": sidebar_width,
+    "padding": "2rem 1rem",
+    "background-color": "#f8f9fa"
+}
+
+# the styles for the main content position it to the right of the sidebar and
+# add some padding.
+CONTENT_STYLE = {
+    "margin-left": sidebar_width,
+    "margin-right": "2rem",
+    "padding": "4rem 1rem 1rem 1rem"
+}
+
+CONTENT_STYLE2 = {
+    "margin": "1rem 1rem 1rem 1rem"
+}
+
+TEXT_STYLE = {
+    'line-height': '3rem',
+    'font-weight': '400'
+}
+
+sidebar = html.Div(
+    [
+        html.H2("Dados Brasil", className="display-4"),
+        html.Hr(),
+        html.P(
+            "Análise de dados históricos dos últimos 20 anos, por presidente, partido e ano.", className="lead"
+        ),
+        dbc.Nav(
+            [
+                dbc.NavLink("Home", href="/", active="exact"),
+                dbc.NavLink("Indicadores Socioeconômicos",
+                            href="/page-1", active="exact"),
+                dbc.NavLink("Gastos da União", href="/page-2", active="exact"),
+                dbc.NavLink("Referências dos Dados",
+                            href="/page-3", active="exact"),
+            ],
+            vertical=True,
+            pills=True,
         ),
     ],
-    style={
-        "background-color": "darkblue",
-        "height": "65px",
-        "width": "100%",
-    },
+    style=SIDEBAR_STYLE,
 )
 
-datepicker = dcc.DatePickerRange(
-    id="datePicker",
-    min_date_allowed=datetime.datetime(2021, 1, 1),
-    max_date_allowed=datetime.datetime.today(),
-    start_date=datetime.datetime(2021, 1, 1),
-    end_date=datetime.datetime.today(),
-    style={"margin-right": "1em"},
-)
+content = html.Div(id="page-content", style=CONTENT_STYLE)
 
-button = html.Button(
-    "Submit",
-    id="button",
-    n_clicks=0,
-    style={
-        "height": "2.5em",
-        "width": "6em",
-        "color": "#fff",
-        "background-color": "#007bff",
-        "border-color": "#007bff",
-        "border-radius": 3,
-        "box-shadow": "0 0 0 0.1rem rgba(0, 123, 255, 0.5)",
-    },
-)
 
-checkbox = dcc.Checklist(
-    id="checkbox", options=[{"label": "Group table by date", "value": "yes"}]
-)
+home = html.Div(id="home",
+                children=[
+                    html.H1('Informações Gerais',
+                            style={'font-weight': '500'}),
+                    html.H5(
+                        'Pela primeira vez em muito tempo, enfrentamos uma eleição na qual os dois principais candidatos à presidência já governaram o país. Por ser um fato inédito, a situação nos permite escolher entre os presidenciáveis não com base em suas propostas, mas com base em seus mandatos passados. Podemos analisar o quadro social e/ou econômico, os gastos públicos de acordo com o setor e quaisquer outros dados disponíveis que sejam importantes para definição de voto do eleitor.', style=TEXT_STYLE),
+                    html.H5(
+                        'Aqui, escolheu-se alguns indicadores utilizados como referências globais para medições do quadro socioeconômico de um país, bem como a distribuição dos gastos públicos nos últimos 20 anos.', style=TEXT_STYLE),
+                    html.H5(
+                        'Todos os dados foram extraídos de fontes confiáveis e estão dísponíveis para download na Aba `Referência dos Dados`.', style=TEXT_STYLE),
+                    html.H5(
+                        'NÃO HÁ INTERESSE EM PROMOVER NENHUM CANDIDATO. Nosso objetivo consiste apenas em fornecer os dados que julgamos importantes para avaliação de um mandato para auxiliar na escolha/definição do voto.', style=TEXT_STYLE),
+                    html.H5(
+                        'O VOTO É UM DIREITO. EXERÇA-O!', style=TEXT_STYLE),
+                    html.H6(
+                        'Desenvolvido por Pedro Henrique Araujo Pinto; M.Sc', style={'line-height': '6rem', 'color': 'darkblue'})
+                ],
+                style=CONTENT_STYLE2)
 
-datatable = dash_table.DataTable(
-    id="datatable",
-    sort_action="native",
-    filter_action="native",
-    style_data={
-        "whiteSpace": "normal",
-        "height": "auto",
-    },
-    style_table={
-        "overflowX": "auto",
-        "minWidth": "100%",
-        "height": "300px",
-        "overflowY": "auto",
-    },
-    style_cell={
-        "height": "auto",
-        "minWidth": "180px",
-        "width": "180px",
-        "maxWidth": "180px",
-        "whiteSpace": "normal",
-    },
-)
+
+indicadores_socioeconomicos = html.Div(id='isec',
+                                       children=[],
+                                       style=CONTENT_STYLE2)
