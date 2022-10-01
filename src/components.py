@@ -1,12 +1,10 @@
 import datetime
 from dash import html, dcc, dash_table
 import dash_bootstrap_components as dbc
-
+from .graphs import *
 
 sidebar_width = "20rem"
 
-
-# the style arguments for the sidebar. We use position:fixed and a fixed width
 SIDEBAR_STYLE = {
     "position": "fixed",
     "top": 0,
@@ -17,8 +15,6 @@ SIDEBAR_STYLE = {
     "background-color": "#f8f9fa"
 }
 
-# the styles for the main content position it to the right of the sidebar and
-# add some padding.
 CONTENT_STYLE = {
     "margin-left": sidebar_width,
     "margin-right": "2rem",
@@ -32,6 +28,13 @@ CONTENT_STYLE2 = {
 TEXT_STYLE = {
     'line-height': '3rem',
     'font-weight': '400'
+}
+
+GRAPH_DIV_STYLE = {
+    "margin": '2rem',
+    'border': '3px solid #f5f5f5',
+    'border-radius': '0.5rem',
+    "box-shadow": '7px 7px #ededed',
 }
 
 sidebar = html.Div(
@@ -64,6 +67,7 @@ home = html.Div(id="home",
                 children=[
                     html.H1('Informações Gerais',
                             style={'font-weight': '500'}),
+                    html.Hr(),
                     html.H5(
                         'Pela primeira vez em muito tempo, enfrentamos uma eleição na qual os dois principais candidatos à presidência já governaram o país. Por ser um fato inédito, a situação nos permite escolher entre os presidenciáveis não com base em suas propostas, mas com base em seus mandatos passados. Podemos analisar o quadro social e/ou econômico, os gastos públicos de acordo com o setor e quaisquer outros dados disponíveis que sejam importantes para definição de voto do eleitor.', style=TEXT_STYLE),
                     html.H5(
@@ -74,12 +78,65 @@ home = html.Div(id="home",
                         'NÃO HÁ INTERESSE EM PROMOVER NENHUM CANDIDATO. Nosso objetivo consiste apenas em fornecer os dados que julgamos importantes para avaliação de um mandato para auxiliar na escolha/definição do voto.', style=TEXT_STYLE),
                     html.H5(
                         'O VOTO É UM DIREITO. EXERÇA-O!', style=TEXT_STYLE),
+                    html.Hr(),
+                    html.H4('Indicadores selecionados:'),
+                    html.Li('PIB (US$);'),
+                    html.Li('PIB per capita (US$);'),
+                    html.Li('Taxa de Desemprego;'),
+                    html.Li('Taxa de Inflação;'),
+                    html.Li('Número de homicídios por 100 mil habitantes;'),
+                    html.Li('Índice de Desenvolvimento Humano (IDH);'),
+                    html.Li('IDH: posição no ranking mundial;'),
+                    html.Li('Índice de Gini;'),
+                    html.Li(
+                        'Gastos da União por Setor (Saúde, Educação, Segurança, entre outros).'),
                     html.H6(
-                        'Desenvolvido por Pedro Henrique Araujo Pinto; M.Sc', style={'line-height': '6rem', 'color': 'darkblue'})
+                        'Desenvolvido por Pedro Henrique Araujo Pinto; M.Sc', style={'line-height': '2rem', 'color': 'darkblue'})
                 ],
                 style=CONTENT_STYLE2)
 
 
 indicadores_socioeconomicos = html.Div(id='isec',
-                                       children=[],
+                                       children=[
+                                           html.Div(id='graph1',
+                                                    children=[
+                                                        dcc.Graph(figure=pib)],
+                                                    style=GRAPH_DIV_STYLE),
+                                           html.Div(id='graph2',
+                                                    children=[
+                                                        dcc.Graph(figure=pib_per_capita)],
+                                                    style=GRAPH_DIV_STYLE),
+                                           html.Div(id='graph3',
+                                                    children=[
+                                                        dcc.Graph(figure=desemprego)],
+                                                    style=GRAPH_DIV_STYLE),
+                                           html.Div(id='graph4',
+                                                    children=[
+                                                        dcc.Graph(figure=inflacao)],
+                                                    style=GRAPH_DIV_STYLE),
+                                           html.Div(id='graph5',
+                                                    children=[
+                                                        dcc.Graph(figure=homicidios)],
+                                                    style=GRAPH_DIV_STYLE),
+                                           html.Div(id='graph6',
+                                                    children=[
+                                                        dcc.Graph(figure=idh)],
+                                                    style=GRAPH_DIV_STYLE),
+                                           html.Div(id='graph7',
+                                                    children=[
+                                                        dcc.Graph(figure=idh_pos)],
+                                                    style=GRAPH_DIV_STYLE),
+                                           html.Div(id='graph8',
+                                                    children=[
+                                                        dcc.Graph(figure=gini)],
+                                                    style=GRAPH_DIV_STYLE)
+                                       ],
                                        style=CONTENT_STYLE2)
+
+
+# gastos_uniao = html.Div(id='isec',
+#                         children=[html.Div(id='graph8',
+#                                            children=[
+#                                                dcc.Graph(figure=gastos_uniao)],
+#                                            style=GRAPH_DIV_STYLE)],
+#                         style=CONTENT_STYLE2)
